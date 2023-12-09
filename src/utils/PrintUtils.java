@@ -126,6 +126,9 @@ public class PrintUtils {
             str = PrintUtils.paintChars(str, ANSI.GRAY, "@", "#", "|");
             str = PrintUtils.paintChars(str, ANSI.YELLOW, "-", "_", "'", ".", "/", "\\");
             str = PrintUtils.paintChars(str, ANSI.CYAN, "~");
+        } else if (year == 2023) {
+            str = PrintUtils.paintChars(str, ANSI.YELLOW, "*");
+            str = PrintUtils.paintChars(str, ANSI.RED, "!", "/", "\\", "^", "-", "@");
         } else {
             str = PrintUtils.paintChars(str, ANSI.GRAY, "@", "#", "|", "-", "_", "'", ".", "/", "\\", "~", ":");
         }

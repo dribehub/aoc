@@ -12,6 +12,7 @@ public class Day1 extends Day {
     public Day1() {
         super("Trebuchet?!");
         this.input = Reader.readAsList(getInputPath());
+        super.setAsciiLine("  * ! /^\\                                          ");
     }
 
     @Override
@@ -42,9 +43,6 @@ public class Day1 extends Day {
     public void solveLvl2() {
         int count = 0;
 
-        // Demo input: 281 (correct)
-//        List<String> input = Reader.readAsList(getDemoInputPath());
-
         for (String line : input) {
             Map<Integer, String> foundDigits = new HashMap<>();
 
@@ -63,8 +61,7 @@ public class Day1 extends Day {
             count += Integer.parseInt(calibrationValue);
         }
 
-        // your answer is too high (55639)
-        super.setLvl2Answer(count);
+        super.setLvl2Answer(count); // 55614
     }
 
     private Map<Integer, String> findFirstAndLastLiteralIfAny(String str) {
@@ -77,13 +74,13 @@ public class Day1 extends Day {
             if (str.contains(val)) {
                 int index = str.indexOf(val);
 
-                if (index < firstLiteralIndex) {
-                    firstLiteralIndex = index;
+                if (str.indexOf(val) < firstLiteralIndex) {
+                    firstLiteralIndex = str.indexOf(val);
                     firstLiteralValue = LiteralDigit.getByLiteral(val).getNumeric();
                 }
 
-                if (index > lastLiteralIndex) {
-                    lastLiteralIndex = index;
+                if (str.lastIndexOf(val) > lastLiteralIndex) {
+                    lastLiteralIndex = str.lastIndexOf(val);
                     lastLiteralValue = LiteralDigit.getByLiteral(val).getNumeric();
                 }
             }
