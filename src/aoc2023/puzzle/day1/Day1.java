@@ -72,8 +72,6 @@ public class Day1 extends Day {
 
         for (String val : LiteralDigit.getAllLiterals()) {
             if (str.contains(val)) {
-                int index = str.indexOf(val);
-
                 if (str.indexOf(val) < firstLiteralIndex) {
                     firstLiteralIndex = str.indexOf(val);
                     firstLiteralValue = LiteralDigit.getByLiteral(val).getNumeric();
