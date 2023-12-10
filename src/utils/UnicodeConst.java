@@ -43,4 +43,6 @@ public final class UnicodeConst {
     public static final String COMMA_SPACE = ", ";
     public static final String COLON_SPACE = ": ";
     public static final String SEMICOLON_SPACE = "; ";
+
+    public static final String[] AOC_SYMBOLS = {AT, HASH, PIPE, MINUS, UNDERSCORE, APOSTROPHE, DOT, SLASH, BACKSLASH, TILDE, COLON};
 }

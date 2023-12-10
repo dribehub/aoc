@@ -39,7 +39,7 @@ public class PrintUtils {
         }
     }
 
-    private static final String separator = ": ";
+    private static final String separator = COLON_SPACE;
 
     private static void print(String key, Object value, String separator) {
         System.out.printf("%s%s%s", key, separator, value);
@@ -132,7 +132,7 @@ public class PrintUtils {
             str = PrintUtils.paintChars(str, ANSI.YELLOW, ASTERISK);
             str = PrintUtils.paintChars(str, ANSI.RED, EXCLAMATION_MARK, SLASH, BACKSLASH, CARET, MINUS, AT);
         } else {
-            str = PrintUtils.paintChars(str, ANSI.GRAY, AT, HASH, PIPE, MINUS, UNDERSCORE, APOSTROPHE, DOT, SLASH, BACKSLASH, TILDE, COLON);
+            str = PrintUtils.paintChars(str, ANSI.GRAY, AOC_SYMBOLS);
         }
 
         System.out.println(str);

@@ -17,10 +17,6 @@ public class Day2 extends Day {
     private final String GREEN_KEY = "green";
     private final String BLUE_KEY = "blue";
 
-    private final int MAX_RED_CUBES = 12;
-    private final int MAX_GREEN_CUBES = 13;
-    private final int MAX_BLUE_CUBES = 14;
-
     public Day2() {
         super("Cube Conundrum");
         this.input = Reader.readAsList(getInputPath());
@@ -28,6 +24,10 @@ public class Day2 extends Day {
 
     @Override
     public void solveLvl1() {
+        final int MAX_RED_CUBES = 12;
+        final int MAX_GREEN_CUBES = 13;
+        final int MAX_BLUE_CUBES = 14;
+
         int gameIndexCount = 0;
 
         for (String game : input) {
@@ -49,8 +49,25 @@ public class Day2 extends Day {
         super.setLvl1Answer(gameIndexCount); // 2278
     }
 
-    private int getGameIndex(String game) {
-        return Integer.parseInt(game.split(UnicodeConst.COLON)[0].substring("Game ".length()));
+    @Override
+    public void solveLvl2() {
+        int gamePower = 0;
+
+        for (String game : input) {
+            int minRedCubes = 0;
+            int minGreenCubes = 0;
+            int minBlueCubes = 0;
+
+            for (Map<String, Integer> subset : this.getGameSubsets(game)) {
+                minRedCubes = Math.max(minRedCubes, subset.get(RED_KEY));
+                minGreenCubes = Math.max(minGreenCubes, subset.get(GREEN_KEY));
+                minBlueCubes = Math.max(minBlueCubes, subset.get(BLUE_KEY));
+            }
+
+            gamePower += minRedCubes * minGreenCubes * minBlueCubes;
+        }
+
+        super.setLvl2Answer(gamePower); // 67953
     }
 
     private List<Map<String, Integer>> getGameSubsets(String game) {
@@ -75,8 +92,7 @@ public class Day2 extends Day {
         return gameSubsets;
     }
 
-    @Override
-    public void solveLvl2() {
-        super.setLvl2Answer(null);
+    private int getGameIndex(String game) {
+        return Integer.parseInt(game.split(UnicodeConst.COLON)[0].substring("Game ".length()));
     }
 }
