@@ -3,6 +3,8 @@ package utils;
 import model.Day;
 import model.Level;
 
+import static utils.UnicodeConst.*;
+
 public class PrintUtils {
 
     public enum ANSI {
@@ -123,14 +125,14 @@ public class PrintUtils {
 
     public static void printAscii(int year, String str) {
         if (year == 2022) {
-            str = PrintUtils.paintChars(str, ANSI.GRAY, "@", "#", "|");
-            str = PrintUtils.paintChars(str, ANSI.YELLOW, "-", "_", "'", ".", "/", "\\");
-            str = PrintUtils.paintChars(str, ANSI.CYAN, "~");
+            str = PrintUtils.paintChars(str, ANSI.GRAY, AT, HASH, PIPE);
+            str = PrintUtils.paintChars(str, ANSI.YELLOW, MINUS, UNDERSCORE, APOSTROPHE, DOT, SLASH, BACKSLASH);
+            str = PrintUtils.paintChars(str, ANSI.CYAN, TILDE);
         } else if (year == 2023) {
-            str = PrintUtils.paintChars(str, ANSI.YELLOW, "*");
-            str = PrintUtils.paintChars(str, ANSI.RED, "!", "/", "\\", "^", "-", "@");
+            str = PrintUtils.paintChars(str, ANSI.YELLOW, ASTERISK);
+            str = PrintUtils.paintChars(str, ANSI.RED, EXCLAMATION_MARK, SLASH, BACKSLASH, CARET, MINUS, AT);
         } else {
-            str = PrintUtils.paintChars(str, ANSI.GRAY, "@", "#", "|", "-", "_", "'", ".", "/", "\\", "~", ":");
+            str = PrintUtils.paintChars(str, ANSI.GRAY, AT, HASH, PIPE, MINUS, UNDERSCORE, APOSTROPHE, DOT, SLASH, BACKSLASH, TILDE, COLON);
         }
 
         System.out.println(str);
