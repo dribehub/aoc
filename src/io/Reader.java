@@ -32,28 +32,34 @@ public class Reader {
      * @see BufferedReader#readLine()
      */
     public static String[] readAsStrings(String filePath) {
-        return readAsList(filePath).toArray(new String[0]);
+        return Reader.readAsList(filePath).toArray(new String[0]);
     }
 
     public static Integer[] readAsInts(String filePath) {
         try {
-            return readAsList(filePath).stream().map(Integer::parseInt).toArray(Integer[]::new);
+            return Reader.readAsList(filePath)
+                    .stream().map(Integer::parseInt)
+                    .toArray(Integer[]::new);
         } catch (NumberFormatException e) {
             System.out.printf("Cannot convert input to Integer[] (%s)\n", e.getMessage());
             return null;
         }
     }
 
-    public static Integer[][] readAsMatrix(String filePath) {
-        String[] strings = readAsStrings(filePath);
-        int len = strings.length, wid = strings[0].length();
-        Integer[][] matrix = new Integer[len][wid];
-        for (int i = 0; i < len; i++) {
-            String number = strings[i];
-            for (int j = 0; j < wid; j++) {
-                matrix[i][j] = (int) number.charAt(j);
+    public static char[][] readAsCharMatrix(String filePath) {
+        String[] strings = Reader.readAsStrings(filePath);
+
+        int length = strings.length;
+        int width = strings[0].length();
+        char[][] matrix = new char[length][width];
+
+        for (int i = 0; i < length; i++) {
+            String str = strings[i];
+            for (int j = 0; j < width; j++) {
+                matrix[i][j] = str.charAt(j);
             }
         }
+
         return matrix;
     }
 
@@ -66,14 +72,16 @@ public class Reader {
      *          false  if the named file does not exist,
      *          is a directory rather than a regular file,
      *          or for some other reason cannot be opened for reading.
+     * @throws RuntimeException if {@link FileReader} throws any IO error on close
      * @see FileNotFoundException
      */
     public static boolean found(String filePath) {
-        try {
-            new FileReader(filePath);
+        try (FileReader fileReader = new FileReader(filePath)) {
             return true;
         } catch (FileNotFoundException e) {
             return false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

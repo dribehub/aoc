@@ -1,6 +1,7 @@
 package model;
 
 import base.GlobalVariable;
+import io.PathFormat;
 import io.Reader;
 import utils.PrintUtils;
 
@@ -9,22 +10,20 @@ import utils.PrintUtils;
  */
 public class AsciiArt extends GlobalVariable {
 
-    public static final String ASCII_ART_PATH_FORMAT = "src/aoc%d/locked-ascii-art.txt";
-
     private final int year;
     private final String[] lockedAsciiLines;
 
     public AsciiArt(int year) {
         this.year = year;
         this.lockedAsciiLines = Reader.readAsStrings(
-                String.format(ASCII_ART_PATH_FORMAT, this.year)
+                PathFormat.getAsciiArtPath(this.year)
         );
     }
 
     public AsciiArt() {
         this.year = GlobalVariable.CURRENT_YEAR;
         this.lockedAsciiLines = Reader.readAsStrings(
-                String.format(ASCII_ART_PATH_FORMAT, this.year)
+                PathFormat.getAsciiArtPath(this.year)
         );
     }
 
@@ -53,50 +52,9 @@ public class AsciiArt extends GlobalVariable {
      * For the locked {@link Day}s, the locked ASCII line is printed instead.
      */
     public void printCurrentYear() {
-        switch (this.year) {
-            case 2021 -> print2021();
-            case 2022 -> print2022();
-            case 2023 -> print2023();
-        }
-    }
-
-    /**
-     * Prints the full ASCII art of 2021.
-     * For the locked {@link Day}s, the locked ASCII line is printed instead.
-     */
-    private void print2021() {
-        for (int i = 25; i > 0; i--) {
+        for (int i = this.lockedAsciiLines.length; i > 0; i--) {
             Day day = DAY_PROVIDER.fetchInstanceByYearAndDay(this.year, i);
-            if (day == null || day.getAsciiLine() == null) {
-                this.printLockedLineByIndex(i);
-            } else {
-                day.printAsciiLine();
-            }
-        }
-    }
 
-    /**
-     * Prints the full ASCII art of 2022.
-     * For the locked {@link Day}s, the locked ASCII line is printed instead.
-     */
-    private void print2022() {
-        for (int i = 27; i >= 1; i--) {
-            Day day = DAY_PROVIDER.fetchInstanceByYearAndDay(this.year, i);
-            if (day == null || day.getAsciiLine() == null) {
-                this.printLockedLineByIndex(i);
-            } else {
-                day.printAsciiLine();
-            }
-        }
-    }
-
-    /**
-     * Prints the full ASCII art of 2023.
-     * For the locked {@link Day}s, the locked ASCII line is printed instead.
-     */
-    private void print2023() {
-        for (int i = 25; i > 0; i--) {
-            Day day = DAY_PROVIDER.fetchInstanceByYearAndDay(this.year, i);
             if (day == null || day.getAsciiLine() == null) {
                 this.printLockedLineByIndex(i);
             } else {

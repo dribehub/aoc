@@ -15,6 +15,23 @@ public class Day1 extends Day {
         super.setAsciiLine("  * ! /^\\                                          ");
     }
 
+    /**
+     * You try to ask why they can't just use a weather machine ("not powerful enough") and where they're even sending
+     * you ("the sky") and why your map looks mostly blank ("you sure ask a lot of questions") and hang on did you just
+     * say the sky ("of course, where do you think snow comes from") when you realize that the Elves are already loading
+     * you into a trebuchet ("please hold still, we need to strap you in").
+     * <br><br>
+     * As they're making the final adjustments, they discover that their calibration document (your puzzle input) has
+     * been <b>amended</b> by a very young Elf who was apparently just excited to show off her art skills.
+     * Consequently, the Elves are having trouble reading the values on the document.
+     * <br><br>
+     * The newly-improved calibration document consists of lines of text; each line originally contained a specific
+     * <b>calibration value</b> that the Elves now need to recover. On each line, the calibration value can be found by
+     * combining the <b>first digit</b> and the <b>last digit</b> (in that order) to form a single <b>two-digit
+     * number</b>.
+     * <br><br>
+     * <b>What is the sum of all of the calibration values?</b>
+     */
     @Override
     public void solveLvl1() {
         int count = 0;
@@ -39,6 +56,14 @@ public class Day1 extends Day {
         return null;
     }
 
+    /**
+     * Your calculation isn't quite right. It looks like some of the digits are actually <b>spelled out with
+     * letters</b>: one, two, three, four, five, six, seven, eight, and nine <b>also</b> count as valid "digits".
+     * <br><br>
+     * Equipped with this new information, you now need to find the real first and last digit on each line.
+     * <br><br>
+     * <b>What is the sum of all of the calibration values?</b>
+     */
     @Override
     public void solveLvl2() {
         int count = 0;

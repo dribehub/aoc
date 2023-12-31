@@ -13,7 +13,7 @@ public class Day1 extends Day {
     public Day1() {
         super("Calorie Counting");
         this.input = Reader.readAsList(getInputPath());
-        super.setAsciiLine("  ~    ~  ~      ~     ~ ~   ~     ~  ~  ~   ~   ");
+        super.setAsciiLine("  ~    ~  ~      ~     ~ ~   ~     ~  ~  ~   ~     ");
     }
 
     @Override

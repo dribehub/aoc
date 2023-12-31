@@ -12,7 +12,7 @@ public class Day2 extends Day {
     public Day2() {
         super("Rock Paper Scissors");
         this.input = Reader.readAsList(getInputPath());
-        super.setAsciiLine("-~------'    ~    ~ '--~-----~-~----___________--");
+        super.setAsciiLine("-~------'    ~    ~ '--~-----~-~----___________--  ");
     }
 
     @Override

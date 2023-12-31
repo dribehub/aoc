@@ -2,7 +2,7 @@ package base;
 
 import model.AsciiArt;
 import model.Day;
-import reflection.ClassProvider;
+import reflection.DayProvider;
 
 /**
  * Class that provides static instances of global objects when extended,
@@ -21,7 +21,7 @@ public class GlobalVariable {
     public static AsciiArt ASCII_ART;
 
     /**
-     * Global variable that sets the {@link ClassProvider}<{@link Day}> instance.
+     * Global variable that sets the {@link DayProvider}<{@link Day}> instance.
      */
-    public static ClassProvider<Day> DAY_PROVIDER;
+    public static DayProvider DAY_PROVIDER;
 }

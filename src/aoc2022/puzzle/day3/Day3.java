@@ -12,7 +12,7 @@ public class Day3 extends Day {
     public Day3() {
         super("Rucksack Reorganization");
         this.input = Reader.readAsList(getInputPath());
-        super.setAsciiLine("@@@@##@@@_/ ~   ~  \\ ' '. '.'.@#@#@#@#@@@###@@@#@");
+        super.setAsciiLine("@@@@##@@@_/ ~   ~  \\ ' '. '.'.@#@#@#@#@@@###@@@#@  ");
     }
 
     @Override

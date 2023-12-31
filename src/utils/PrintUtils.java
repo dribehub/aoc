@@ -34,12 +34,12 @@ public class PrintUtils {
             this.code = String.format(format, code);
         }
 
-        public String value() {
+        public String getCode() {
             return code;
         }
     }
 
-    private static final String separator = COLON_SPACE;
+    private static final String SEPARATOR = COLON_SPACE;
 
     private static void print(String key, Object value, String separator) {
         System.out.printf("%s%s%s", key, separator, value);
@@ -58,93 +58,97 @@ public class PrintUtils {
     }
 
     public static void print(String key, Object value) {
-        PrintUtils.print(key, value, separator);
+        print(key, value, SEPARATOR);
     }
 
     public static void println(String key, Object value) {
-        PrintUtils.println(key, value, separator);
+        println(key, value, SEPARATOR);
     }
 
     public static void print(String key, Object value, ANSI keyColor) {
         String k = paint(key, keyColor);
-        PrintUtils.print(k, value, separator);
+        print(k, value, SEPARATOR);
     }
 
     public static void println(String key, Object value, ANSI keyColor) {
         String k = paint(key, keyColor);
-        PrintUtils.println(k, value, separator);
+        println(k, value, SEPARATOR);
     }
 
     public static void print(String key, Object value, ANSI keyColor, ANSI valueColor) {
         String k = paint(key, keyColor);
         String v = paint(value.toString(), valueColor);
-        PrintUtils.print(k, v, separator);
+        print(k, v, SEPARATOR);
     }
 
     public static void println(String key, Object value, ANSI keyColor, ANSI valueColor) {
         String k = paint(key, keyColor);
         String v = paint(value.toString(), valueColor);
-        PrintUtils.println(k, v, separator);
+        println(k, v, SEPARATOR);
     }
 
     public static void print(String key, Object value, ANSI keyColor, ANSI valueColor, ANSI separatorColor) {
         String k = paint(key, keyColor);
         String v = paint(value.toString(), valueColor);
-        String s = paint(separator, separatorColor);
-        PrintUtils.print(k, v, s);
+        String s = paint(SEPARATOR, separatorColor);
+        print(k, v, s);
     }
 
     public static void println(String key, Object value, ANSI keyColor, ANSI valueColor, ANSI separatorColor) {
         String k = paint(key, keyColor);
         String v = paint(value.toString(), valueColor);
-        String s = paint(separator, separatorColor);
-        PrintUtils.println(k, v, s);
-    }
-
-    public static void printFaded(String key, Object value) {
-        PrintUtils.print(key, value, ANSI.GRAY, ANSI.GRAY, ANSI.GRAY);
-    }
-
-    public static void printlnFaded(String key, Object value) {
-        PrintUtils.println(key, value, ANSI.GRAY, ANSI.GRAY, ANSI.GRAY);
+        String s = paint(SEPARATOR, separatorColor);
+        println(k, v, s);
     }
 
     public static void printDay(Day day) {
         String str = String.format("--- Day %d: %s ---", day.getIndex(), day.getName());
-        System.out.println(day.isFinished() ? paint(str, ANSI.YELLOW) : str);
+
+        if (day.isCompleted()) {
+            str = paint(str, Day.COMPLETED_COLOR);
+        } else if (day.isInProgress()) {
+            str = paint(str, Day.IN_PROGRESS_COLOR);
+        }
+
+        System.out.println(str);
     }
 
     public static void printLevel(Level level) {
         String key = "\tLevel " + level.getIndex();
+
         if (level.getAnswer() == null) {
-            PrintUtils.printlnFaded(key, "null");
+            println(key, "null", Level.COLOR, ANSI.GRAY);
+        } else if (level.isAnswerValid()) {
+            println(paint(key, Level.COLOR), level.getAnswer());
         } else {
-            PrintUtils.println(paint(key, PrintUtils.ANSI.BLUE), level.getAnswer());
+            final String message = level.getInvalidAttempt().getState().getMessage();
+            final String value = String.join(" ", level.getAnswer(), paint("(%s)".formatted(message), ANSI.RED));
+            println(paint(key, Level.COLOR), value);
         }
     }
 
     public static void printAscii(int year, String str) {
         if (year == 2022) {
-            str = PrintUtils.paintChars(str, ANSI.GRAY, AT, HASH, PIPE);
-            str = PrintUtils.paintChars(str, ANSI.YELLOW, MINUS, UNDERSCORE, APOSTROPHE, DOT, SLASH, BACKSLASH);
-            str = PrintUtils.paintChars(str, ANSI.CYAN, TILDE);
+            str = paintChars(str, ANSI.GRAY, AT, HASH, PIPE);
+            str = paintChars(str, ANSI.YELLOW, MINUS, UNDERSCORE, APOSTROPHE, DOT, SLASH, BACKSLASH);
+            str = paintChars(str, ANSI.CYAN, TILDE);
         } else if (year == 2023) {
-            str = PrintUtils.paintChars(str, ANSI.YELLOW, ASTERISK);
-            str = PrintUtils.paintChars(str, ANSI.RED, EXCLAMATION_MARK, SLASH, BACKSLASH, CARET, MINUS, AT);
+            str = paintChars(str, ANSI.YELLOW, ASTERISK);
+            str = paintChars(str, ANSI.RED, EXCLAMATION_MARK, SLASH, BACKSLASH, CARET, MINUS, AT);
         } else {
-            str = PrintUtils.paintChars(str, ANSI.GRAY, AOC_SYMBOLS);
+            str = paintChars(str, ANSI.GRAY, AOC_SYMBOLS);
         }
 
         System.out.println(str);
     }
 
     private static String paint(String str, ANSI color) {
-        return color.code + str + ANSI.NORMAL.code;
+        return color.getCode() + str + ANSI.NORMAL.getCode();
     }
 
     private static String paintChars(String str, ANSI color, String... charSequence) {
         for (String charString : charSequence) {
-            str = str.replace(charString, PrintUtils.paint(charString, color));
+            str = str.replace(charString, paint(charString, color));
         }
 
         return str;

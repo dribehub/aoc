@@ -14,7 +14,7 @@ public class Day4 extends Day {
     public Day4() {
         super("Camp Cleanup");
         this.input = Reader.readAsList(getInputPath());
-        super.setAsciiLine("@@#@##@@@@@.'~'./\\'./\\' .@#@@#@@##@@@@##@#@@#@");
+        super.setAsciiLine("@@@@#@@@#@@.' ~  './\\'./\\' .@@#@@##@#@@@#@#@##@#@  ");
     }
 
     @Override

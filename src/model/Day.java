@@ -1,40 +1,33 @@
 package model;
 
+import io.PathFormat;
 import utils.PrintUtils;
+import utils.UnicodeConst;
+
+import static utils.PrintUtils.*;
 
 public abstract class Day {
 
-    public static final String FILE_NAME_FORMAT = "day%d.txt";
-    public static final String INPUT_PATH_FORMAT = "src/aoc%d/input/%s";
-    public static final String DEMO_INPUT_PATH_FORMAT = "src/aoc%d/input/demo/%s";
+    public static final ANSI IN_PROGRESS_COLOR = ANSI.NORMAL_BOLD;
+    public static final ANSI COMPLETED_COLOR = ANSI.YELLOW;
 
     private final int year;
     private final int index;
-    private final String name;
-
-    private final String inputPath;
-    private final String demoInputPath;
-
     private final Level lvl1;
     private final Level lvl2;
-
-    private final AsciiArt asciiArt;
+    private final String name;
+    private final String inputPath;
+    private final String demoInputPath;
     private String asciiLine;
-    private boolean isFinished;
 
     public Day(String name) {
         this.year = Integer.parseInt(this.getClass().getPackageName().substring(3, 7));
         this.index = Integer.parseInt(this.getClass().getSimpleName().substring(3));
-        this.name = name;
-
-        String fileName = String.format(FILE_NAME_FORMAT, this.index);
-        this.inputPath = String.format(INPUT_PATH_FORMAT, this.year, fileName);
-        this.demoInputPath = String.format(DEMO_INPUT_PATH_FORMAT, this.year, fileName);
-
         this.lvl1 = new Level(1);
         this.lvl2 = new Level(2);
-
-        this.asciiArt = new AsciiArt(this.year);
+        this.name = name;
+        this.inputPath = PathFormat.getInputPath(this.year, this.index);
+        this.demoInputPath = PathFormat.getDemoInputPath(this.year, this.index);
     }
 
     public abstract void solveLvl1();
@@ -44,9 +37,12 @@ public abstract class Day {
     public void run() {
         this.solveLvl1();
         this.solveLvl2();
-        PrintUtils.printDay(this);
-        PrintUtils.printLevel(lvl1);
-        PrintUtils.printLevel(lvl2);
+
+        if (this.hasStarted()) {
+            printDay(this);
+            printLevel(this.lvl1);
+            printLevel(this.lvl2);
+        }
     }
 
     public int getYear() {
@@ -74,7 +70,7 @@ public abstract class Day {
     }
 
     public void setLvl1Answer(Object answer) {
-        this.lvl1.setAnswer(answer);
+        lvl1.setAnswer(answer);
     }
 
     public Level getLvl2() {
@@ -82,11 +78,7 @@ public abstract class Day {
     }
 
     public void setLvl2Answer(Object answer) {
-        this.lvl2.setAnswer(answer);
-    }
-
-    public AsciiArt getAsciiArt() {
-        return asciiArt;
+        lvl2.setAnswer(answer);
     }
 
     public String getAsciiLine() {
@@ -94,19 +86,22 @@ public abstract class Day {
     }
 
     public void setAsciiLine(String asciiLine) {
-        this.asciiLine = asciiLine;
-        this.isFinished = true;
+        this.asciiLine = asciiLine + UnicodeConst.SPACE + this.index;
     }
 
     public void printAsciiLine() {
-        PrintUtils.printAscii(this.year, asciiLine);
+        PrintUtils.printAscii(this.year, this.asciiLine);
     }
 
-    public boolean isFinished() {
-        return isFinished;
+    public boolean hasStarted() {
+        return lvl1.isCompleted();
     }
 
-    public void setFinished(boolean finished) {
-        isFinished = finished;
+    public boolean isInProgress() {
+        return lvl1.isCompleted() && !lvl2.isCompleted();
+    }
+
+    public boolean isCompleted() {
+        return lvl1.isCompleted() && lvl2.isCompleted();
     }
 }
