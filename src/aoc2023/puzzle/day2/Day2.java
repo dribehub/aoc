@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class Day2 extends Day {
 
@@ -50,29 +51,28 @@ public class Day2 extends Day {
      */
     @Override
     public void solveLvl1() {
+        Predicate<String> predicate = game -> this.getMappedSubsets(game)
+                .stream().allMatch(this::isSubsetPossible);
+
+        int gameIdSum = input.stream().filter(predicate)
+                .mapToInt(this::getGameId).sum();
+
+        super.setLvl1Answer(gameIdSum); // 2278
+    }
+
+    /**
+     * Checks if the given subset is a possible game solution.
+     * @param subset the game subset mapped by color
+     * @return {@code true} if subset colors are within color bounds for a possible game, otherwise {@code false}
+     */
+    private boolean isSubsetPossible(Map<String, Integer> subset) {
         final int MAX_RED_CUBES = 12;
         final int MAX_GREEN_CUBES = 13;
         final int MAX_BLUE_CUBES = 14;
-
-        int gameIndexCount = 0;
-
-        for (String game : input) {
-            boolean isGamePossible = true;
-
-            for (Map<String, Integer> subset : this.getGameSubsets(game)) {
-                if (subset.get(RED_KEY) > MAX_RED_CUBES
-                        || subset.get(GREEN_KEY) > MAX_GREEN_CUBES
-                        || subset.get(BLUE_KEY) > MAX_BLUE_CUBES) {
-                    isGamePossible = false;
-                }
-            }
-
-            if (isGamePossible) {
-                gameIndexCount += this.getGameIndex(game);
-            }
-        }
-
-        super.setLvl1Answer(gameIndexCount); // 2278
+        final boolean isRedPossible = subset.get(RED_KEY) <= MAX_RED_CUBES;
+        final boolean isGreenPossible = subset.get(GREEN_KEY) <= MAX_GREEN_CUBES;
+        final boolean isBluePossible = subset.get(BLUE_KEY) <= MAX_BLUE_CUBES;
+        return isRedPossible && isGreenPossible && isBluePossible;
     }
 
     /**
@@ -91,48 +91,79 @@ public class Day2 extends Day {
      */
     @Override
     public void solveLvl2() {
-        int gamePower = 0;
+        int gamePowerSum = 0;
 
         for (String game : input) {
             int minRedCubes = 0;
             int minGreenCubes = 0;
             int minBlueCubes = 0;
 
-            for (Map<String, Integer> subset : this.getGameSubsets(game)) {
+            for (Map<String, Integer> subset : this.getMappedSubsets(game)) {
                 minRedCubes = Math.max(minRedCubes, subset.get(RED_KEY));
                 minGreenCubes = Math.max(minGreenCubes, subset.get(GREEN_KEY));
                 minBlueCubes = Math.max(minBlueCubes, subset.get(BLUE_KEY));
             }
 
-            gamePower += minRedCubes * minGreenCubes * minBlueCubes;
+            gamePowerSum += minRedCubes * minGreenCubes * minBlueCubes;
         }
 
-        super.setLvl2Answer(gamePower); // 67953
+        super.setLvl2Answer(gamePowerSum); // 67953
     }
 
-    private List<Map<String, Integer>> getGameSubsets(String game) {
-        List<Map<String, Integer>> gameSubsets = new ArrayList<>();
+    /**
+     * Returns a list of all game subsets mapped by color.
+     * @param game the game to be mapped
+     * @return a list of all mapped game subsets
+     */
+    private List<Map<String, Integer>> getMappedSubsets(String game) {
+        List<Map<String, Integer>> mappedSubsets = new ArrayList<>();
 
-        for (String subset : game.split(UnicodeConst.COLON_SPACE)[1].split(UnicodeConst.SEMICOLON_SPACE)) {
-            String[] subsetElements = subset.split(UnicodeConst.COMMA_SPACE);
-            Map<String, Integer> subsetColors = new HashMap<>();
-            subsetColors.put(RED_KEY, 0);
-            subsetColors.put(GREEN_KEY, 0);
-            subsetColors.put(BLUE_KEY, 0);
-            gameSubsets.add(subsetColors);
-
-            for (String element : subsetElements) {
-                String[] elementProps = element.split(UnicodeConst.SPACE);
-                int amount = Integer.parseInt(elementProps[0]);
-                String color = elementProps[1];
-                subsetColors.put(color, amount);
+        for (String subset : this.getSubsets(game)) {
+            Map<String, Integer> colorMap = this.addInitialColorMap(mappedSubsets);
+            for (String group : subset.split(UnicodeConst.COMMA_SPACE)) {
+                String[] groupProperties = group.split(UnicodeConst.SPACE);
+                int amount = Integer.parseInt(groupProperties[0]);
+                String color = groupProperties[1];
+                colorMap.put(color, amount);
             }
         }
 
-        return gameSubsets;
+        return mappedSubsets;
     }
 
-    private int getGameIndex(String game) {
-        return Integer.parseInt(game.split(UnicodeConst.COLON)[0].substring("Game ".length()));
+    /**
+     * Adds and returns a map initialized with 0 values that will be used to map some subset by color.
+     * @param subsets the list of game subsets
+     * @return the initialized map
+     */
+    private Map<String, Integer> addInitialColorMap(List<Map<String, Integer>> subsets) {
+        Map<String, Integer> colorMap = new HashMap<>();
+        final int DEFAULT_VALUE = 0;
+        colorMap.put(RED_KEY, DEFAULT_VALUE);
+        colorMap.put(GREEN_KEY, DEFAULT_VALUE);
+        colorMap.put(BLUE_KEY, DEFAULT_VALUE);
+        subsets.add(colorMap);
+        return colorMap;
+    }
+
+    /**
+     * Splits and returns an array of game subsets.
+     * @param game the game string input
+     * @return an array of all subsets of the game
+     */
+    private String[] getSubsets(String game) {
+        final String rightSideOfColon = game.split(UnicodeConst.COLON_SPACE)[1];
+        return rightSideOfColon.split(UnicodeConst.SEMICOLON_SPACE);
+    }
+
+    /**
+     * Retrieves the game ID from the game input.
+     * @param game the game string input
+     * @return the game ID
+     */
+    private int getGameId(String game) {
+        final String leftSideOfColon = game.split(UnicodeConst.COLON)[0];
+        final String gameId = leftSideOfColon.substring("Game ".length());
+        return Integer.parseInt(gameId);
     }
 }

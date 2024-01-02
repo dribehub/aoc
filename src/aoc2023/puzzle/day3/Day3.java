@@ -12,26 +12,26 @@ import java.util.List;
 public class Day3 extends Day {
 
     private final char[][] input;
-
-    private final String[] symbols = {
-            UnicodeConst.AT,
-            UnicodeConst.HASH,
-            UnicodeConst.DOLLAR,
-            UnicodeConst.PERCENT,
-            UnicodeConst.AMPERSAND,
-            UnicodeConst.ASTERISK,
-            UnicodeConst.MINUS,
-            UnicodeConst.PLUS,
-            UnicodeConst.EQUALS,
-            UnicodeConst.SLASH
-    };
+    private final String[] symbols;
 
     private final static String GEAR = UnicodeConst.ASTERISK;
 
     public Day3() {
         super("Gear Ratios");
-        this.input = Reader.readAsCharMatrix(getInputPath());
-//        this.input = Reader.readAsCharMatrix(getDemoInputPath());
+        this.symbols = new String[] {
+                UnicodeConst.AT,
+                UnicodeConst.HASH,
+                UnicodeConst.DOLLAR,
+                UnicodeConst.PERCENT,
+                UnicodeConst.AMPERSAND,
+                UnicodeConst.ASTERISK,
+                UnicodeConst.MINUS,
+                UnicodeConst.PLUS,
+                UnicodeConst.EQUALS,
+                UnicodeConst.SLASH
+        };
+//        this.input = Reader.readAsCharMatrix(getInputPath());
+        this.input = Reader.readAsCharMatrix(getDemoInputPath());
     }
 
     /**
@@ -41,7 +41,8 @@ public class Day3 extends Day {
      * It doesn't take long to find the gondolas, but there seems to be a problem: they're not moving.
      * <br><br>
      * "Aaah!"
-     * <br><br>You turn around to see a slightly-greasy Elf with a wrench and a look of surprise. "Sorry, I wasn't
+     * <br><br>
+     * You turn around to see a slightly-greasy Elf with a wrench and a look of surprise. "Sorry, I wasn't
      * expecting anyone! The gondola lift isn't working right now; it'll still be a while before I can fix it." You
      * offer to help.
      * <br><br>
@@ -52,11 +53,12 @@ public class Day3 extends Day {
      * The engine schematic (your puzzle input) consists of a visual representation of the engine. There are lots of
      * numbers and symbols you don't really understand, but apparently <b>any number adjacent to a symbol</b>, even
      * diagonally, is a "part number" and should be included in your sum. (Periods (.) do not count as a symbol.)
-     * <br><br><b>What is the sum of all of the part numbers in the engine schematic?<b/>
+     * <br><br>
+     * <b>What is the sum of all of the part numbers in the engine schematic?<b/>
      */
     @Override
     public void solveLvl1() {
-        int sum = 0;
+        int partNumberSum = 0;
 
         for (int i = 0; i < input.length; i++) {
             for (int j = 0; j < input[i].length; j++) {
@@ -65,7 +67,7 @@ public class Day3 extends Day {
                     int numOfDigits = String.valueOf(partNumber).length();
 
                     if (this.hasAdjacentSymbol(i, j, numOfDigits)) {
-                        sum += partNumber;
+                        partNumberSum += partNumber;
                     }
 
                     j += numOfDigits - 1;
@@ -73,7 +75,7 @@ public class Day3 extends Day {
             }
         }
 
-        super.setLvl1Answer(sum); // 532445
+        super.setLvl1Answer(partNumberSum); // 532445
     }
 
     private boolean hasAdjacentSymbol(int x, int y, int numOfDigits) {
